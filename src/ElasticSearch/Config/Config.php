@@ -2,82 +2,41 @@
 
 namespace Matchish\ScoutElasticSearch\ElasticSearch\Config;
 
+/**
+ * @method static array hosts()
+ * @method static user()
+ * @method static password()
+ * @method static elasticCloudId()
+ * @method static apiKey()
+ * @method static queueTimeout()
+ */
 class Config
 {
-    protected string $config;
-
     /**
-     * @param  string  $config
-     */
-    private function __construct(string $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * @param  string  $config
-     * @return Storage
-     */
-    public static function load(string $config): Storage
-    {
-        return new self($config);
-    }
-
-    /**
-     * @return array
-     */
-    public static function hosts(): array
-    {
-        return explode(',', $this->loadConfig('host'));
-    }
-
-    /**
-     * @return ?string
-     */
-    public static function user(): ?string
-    {
-        return $this->loadConfig('user');
-    }
-
-    /**
-     * @return ?string
-     */
-    public static function password(): ?string
-    {
-        return $this->loadConfig('password');
-    }
-
-    /**
-     * @return ?string
-     */
-    public static function elasticCloudId(): ?string
-    {
-        return $this->loadConfig('cloud_id');
-    }
-
-    /**
-     * @return ?string
-     */
-    public static function apiKey(): ?string
-    {
-        return $this->loadConfig('api_key');
-    }
-
-    /**
-     * @param  string  $path
+     * @param  string  $method
+     * @param  array  $parameters
      * @return mixed
      */
-    private function loadConfig(string $path): mixed
+    public function __call(string $method, array $parameters)
     {
-        return config($this->getKey($path));
+        return (new self())->parse()->$method(...$parameters);
     }
 
     /**
-     * @param  string  $path
-     * @return string
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
      */
-    private function getKey(string $path): string
+    public static function __callStatic(string $method, array $parameters)
     {
-        return sprintf('%s.%s', $this->config, $path);
+        return (new self())->parse()->$method(...$parameters);
+    }
+
+    /**
+     * @return Storage
+     */
+    public function parse(): Storage
+    {
+        return Storage::load('elasticsearch');
     }
 }
