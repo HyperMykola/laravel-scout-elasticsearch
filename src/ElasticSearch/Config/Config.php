@@ -2,36 +2,82 @@
 
 namespace Matchish\ScoutElasticSearch\ElasticSearch\Config;
 
-/**
- * @method static array hosts()
- */
-class Config
+class Storage
 {
+    protected string $config;
+
     /**
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return mixed
+     * @param  string  $config
      */
-    public function __call(string $method, array $parameters)
+    private function __construct(string $config)
     {
-        return (new self())->parse()->$method(...$parameters);
+        $this->config = $config;
     }
 
     /**
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return mixed
-     */
-    public static function __callStatic(string $method, array $parameters)
-    {
-        return (new self())->parse()->$method(...$parameters);
-    }
-
-    /**
+     * @param  string  $config
      * @return Storage
      */
-    public function parse(): Storage
+    public static function load(string $config): Storage
     {
-        return Storage::load('elasticsearch');
+        return new self($config);
+    }
+
+    /**
+     * @return array
+     */
+    public function hosts(): array
+    {
+        return explode(',', $this->loadConfig('host'));
+    }
+
+    /**
+     * @return ?string
+     */
+    public function user(): ?string
+    {
+        return $this->loadConfig('user');
+    }
+
+    /**
+     * @return ?string
+     */
+    public function password(): ?string
+    {
+        return $this->loadConfig('password');
+    }
+
+    /**
+     * @return ?string
+     */
+    public function elasticCloudId(): ?string
+    {
+        return $this->loadConfig('cloud_id');
+    }
+
+    /**
+     * @return ?string
+     */
+    public function apiKey(): ?string
+    {
+        return $this->loadConfig('api_key');
+    }
+
+    /**
+     * @param  string  $path
+     * @return mixed
+     */
+    private function loadConfig(string $path): mixed
+    {
+        return config($this->getKey($path));
+    }
+
+    /**
+     * @param  string  $path
+     * @return string
+     */
+    private function getKey(string $path): string
+    {
+        return sprintf('%s.%s', $this->config, $path);
     }
 }
