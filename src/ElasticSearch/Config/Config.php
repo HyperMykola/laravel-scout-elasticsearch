@@ -2,7 +2,7 @@
 
 namespace Matchish\ScoutElasticSearch\ElasticSearch\Config;
 
-class Storage
+class Config
 {
     protected string $config;
 
