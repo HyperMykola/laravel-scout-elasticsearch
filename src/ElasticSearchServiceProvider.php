@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Matchish\ScoutElasticSearch;
 
-use Elastic\Elasticsearch\Client;
-use Elastic\Elasticsearch\ClientBuilder;
+use Elasticsearch\Client;
+use Elasticsearch\ClientBuilder;
 use Illuminate\Support\ServiceProvider;
 use Matchish\ScoutElasticSearch\ElasticSearch\Config\Config;
-use Matchish\ScoutElasticSearch\ElasticSearch\EloquentHitsIteratorAggregate;
-use Matchish\ScoutElasticSearch\ElasticSearch\HitsIteratorAggregate;
 
 final class ElasticSearchServiceProvider extends ServiceProvider
 {
@@ -35,8 +33,8 @@ final class ElasticSearchServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(
-            HitsIteratorAggregate::class,
-            EloquentHitsIteratorAggregate::class
+            'Matchish\ScoutElasticSearch\ElasticSearch\HitsIteratorAggregate',
+            'Matchish\ScoutElasticSearch\ElasticSearch\EloquentHitsIteratorAggregate'
         );
     }
 
