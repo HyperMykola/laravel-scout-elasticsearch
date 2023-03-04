@@ -26,7 +26,7 @@ class Config
     /**
      * @return array
      */
-    public function hosts(): array
+    public static function hosts(): array
     {
         return explode(',', $this->loadConfig('host'));
     }
@@ -34,7 +34,7 @@ class Config
     /**
      * @return ?string
      */
-    public function user(): ?string
+    public static function user(): ?string
     {
         return $this->loadConfig('user');
     }
@@ -42,7 +42,7 @@ class Config
     /**
      * @return ?string
      */
-    public function password(): ?string
+    public static function password(): ?string
     {
         return $this->loadConfig('password');
     }
@@ -50,7 +50,7 @@ class Config
     /**
      * @return ?string
      */
-    public function elasticCloudId(): ?string
+    public static function elasticCloudId(): ?string
     {
         return $this->loadConfig('cloud_id');
     }
@@ -58,7 +58,7 @@ class Config
     /**
      * @return ?string
      */
-    public function apiKey(): ?string
+    public static function apiKey(): ?string
     {
         return $this->loadConfig('api_key');
     }
